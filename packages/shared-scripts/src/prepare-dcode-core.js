@@ -95,7 +95,7 @@ function writeJson(filePath, payload) {
 }
 
 function getBinaryName(platform) {
-  return platform === 'win32' ? 'aioncore.exe' : 'aioncore';
+  return platform === 'win32' ? 'dcode-core.exe' : 'dcode-core';
 }
 
 function getActionsTarget(platform, arch) {

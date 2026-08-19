@@ -443,20 +443,32 @@ const Layout: React.FC<{
                     viewBox='0 0 80 80'
                     fill='none'
                   >
-                    <path
-                      key='logo-path-1'
-                      d='M40 20 Q38 22 25 40 Q23 42 26 42 L30 42 Q32 40 40 30 Q48 40 50 42 L54 42 Q57 42 55 40 Q42 22 40 20'
-                      fill='white'
-                    ></path>
-                    <circle key='logo-circle' cx='40' cy='46' r='3' fill='white'></circle>
-                    <path
-                      key='logo-path-2'
-                      d='M18 50 Q40 70 62 50'
-                      stroke='white'
-                      strokeWidth='3.5'
-                      fill='none'
-                      strokeLinecap='round'
-                    ></path>
+                    <defs>
+                      <linearGradient id='dcodeSidebarLogoGradient' x1='0' y1='0' x2='0' y2='1'>
+                        <stop offset='0' stopColor='#8b8bf5' />
+                        <stop offset='1' stopColor='#6d28d9' />
+                      </linearGradient>
+                    </defs>
+                    <g transform='translate(40,40)'>
+                      <path
+                        key='logo-chevron'
+                        d='M -14 -16 L 4 0 L -14 16'
+                        fill='none'
+                        stroke='white'
+                        strokeWidth='7'
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                      ></path>
+                      <rect
+                        key='logo-cursor'
+                        x='10'
+                        y='-9'
+                        width='7'
+                        height='18'
+                        rx='2.5'
+                        fill='url(#dcodeSidebarLogoGradient)'
+                      ></rect>
+                    </g>
                   </svg>
                 </div>
                 {isSettingsRoute ? (

@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 function backendBinaryName(platform) {
-  return platform === 'win32' ? 'aioncore.exe' : 'aioncore';
+  return platform === 'win32' ? 'dcode-core.exe' : 'dcode-core';
 }
 
 function normalize(relativePath) {
@@ -38,7 +38,7 @@ function requireRelativePath(baseDir, runtimeKey, parts, checked, missing, failu
   checked.push(relativePath);
 
   if (!isFile(path.join(baseDir, ...parts))) {
-    const failure = { component: 'aioncore', reason: 'missing_file', path: relativePath };
+    const failure = { component: 'dcode-core', reason: 'missing_file', path: relativePath };
     failures.push(failure);
     missing.push(relativePath);
   }

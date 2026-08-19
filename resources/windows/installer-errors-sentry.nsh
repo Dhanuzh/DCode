@@ -25,14 +25,7 @@
   ${Else}
     StrCpy $9 "yes"
     MessageBox MB_YESNO|MB_ICONSTOP \
-      "${AIONUI_MSG_INSTALL_FAILED_ZH} (${_CODE})$\r$\n$\r$\n\
-      ${_MSG_ZH}$\r$\n$\r$\n\
-      ${AIONUI_MSG_SUGGESTED_ACTION_ZH}:$\r$\n${_ACTION_ZH}$\r$\n$\r$\n\
-      ${AIONUI_MSG_DIAGNOSTICS_ZH}:$\r$\n${_DIAGNOSTICS_ZH}$\r$\n$\r$\n\
-      ${AIONUI_MSG_INSTALLER_LOG_ZH}:$\r$\n$AionUiSessionLogPath$\r$\n$\r$\n\
-      ${AIONUI_MSG_SEND_REPORT_ZH}$\r$\n$\r$\n\
-      ${AIONUI_MSG_BLOCK_SEPARATOR}$\r$\n$\r$\n\
-      ${AIONUI_MSG_INSTALL_FAILED_EN} (${_CODE})$\r$\n$\r$\n\
+      "${AIONUI_MSG_INSTALL_FAILED_EN} (${_CODE})$\r$\n$\r$\n\
       ${_MSG_EN}$\r$\n$\r$\n\
       ${AIONUI_MSG_SUGGESTED_ACTION_EN}:$\r$\n${_ACTION_EN}$\r$\n$\r$\n\
       ${AIONUI_MSG_DIAGNOSTICS_EN}:$\r$\n${_DIAGNOSTICS_EN}$\r$\n$\r$\n\
@@ -92,7 +85,7 @@
   Push $9
   InitPluginsDir
   File /oname=$PLUGINSDIR\aionui-report-installer-failure.ps1 "${PROJECT_DIR}\resources\windows\support\report-installer-failure.ps1"
-  nsExec::Exec `"$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File "$PLUGINSDIR\aionui-report-installer-failure.ps1" -Dsn "${AIONUI_SENTRY_DSN}" -LogPath "$AionUiSessionLogPath" -Code "${_CODE}" -Detail "${_DETAIL}" -Release "${VERSION}" -Arch "${AIONUI_TARGET_ARCH}" -Session "$AionUiSessionId" -Updated "$AionUiIsUpdated" ${_NO_UI}`
+  nsExec::Exec `"$SYSDIR\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -ExecutionPolicy Bypass -File "$PLUGINSDIR\aionui-report-installer-failure.ps1" -Dsn "${DCODE_SENTRY_DSN}" -LogPath "$AionUiSessionLogPath" -Code "${_CODE}" -Detail "${_DETAIL}" -Release "${VERSION}" -Arch "${AIONUI_TARGET_ARCH}" -Session "$AionUiSessionId" -Updated "$AionUiIsUpdated" ${_NO_UI}`
   Pop $9
   Pop $9
 !macroend
