@@ -8,7 +8,6 @@ Documentation is organized by reader intent, not by document type.
 | [`contributing/`](contributing) | Contributors        | Dev environment setup, file-structure conventions, PR automation workflow.                                         |
 | [`theming/`](theming)           | Contributors        | Design tokens and theming conventions.                                                                              |
 | [`prds/`](prds)                 | Product team        | Formal Product Requirement Documents maintained by the product team. **Do not reorganize without their consent.** |
-| [`readme/`](readme)             | Global users        | Translated copies of the root `readme.md` (Chinese, Japanese, Korean, Spanish, etc.).                              |
 
 ## Quick pointers
 
@@ -24,4 +23,3 @@ Documentation is organized by reader intent, not by document type.
 | Contributor convention, workflow, or tooling rule  | `contributing/`               |
 | Design tokens / theming convention                 | `theming/`                    |
 | Formal PRD owned by product team                   | `prds/` (coordinate first)   |
-| README translation                                 | `readme/readme_<locale>.md`  |

@@ -6,7 +6,6 @@ Rules for organizing files and directories across the entire Electron project.
 
 ### Root Directory Rules
 
-- **README translations** belong in `docs/readme/`, not at root. Only the main `readme.md` stays at root (GitHub convention)
 - **Guide documents** (deployment, testing, WebUI, CDP, etc.) belong in `docs/guides/`
 - **Contributor documentation** (dev setup, code style, file structure, PR workflow) belongs in `docs/contributing/`
 - **Architecture documentation** belongs in `docs/architecture/` (research notes under `docs/architecture/research/`)
