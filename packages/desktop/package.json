@@ -1,0 +1,10 @@
+{
+  "name": "@dcode/desktop",
+  "version": "0.0.0",
+  "private": true,
+  "description": "DCode desktop Electron application",
+  "main": "../../out/main/index.js",
+  "dependencies": {
+    "@dcode/web-host": "workspace:*"
+  }
+}
