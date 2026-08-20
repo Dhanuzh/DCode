@@ -43,9 +43,9 @@ async function launchAppWithoutExtensions(): Promise<ElectronApplication> {
     cwd: projectRoot,
     env: {
       ...process.env,
-      AIONUI_EXTENSIONS_PATH: emptyExtensionsDir,
-      AIONUI_EXTENSION_STATES_FILE: extensionStatesFile,
-      AIONUI_DISABLE_AUTO_UPDATE: '1',
+      DCODE_EXTENSIONS_PATH: emptyExtensionsDir,
+      DCODE_EXTENSION_STATES_FILE: extensionStatesFile,
+      DCODE_DISABLE_AUTO_UPDATE: '1',
       AIONUI_DISABLE_DEVTOOLS: '1',
       DCODE_E2E_TEST: '1',
       AIONUI_CDP_PORT: '0',

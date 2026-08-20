@@ -35,7 +35,7 @@ test.describe('Installation integrity failure dialog', () => {
       env: {
         ...process.env,
         AIONUI_DEBUG_BACKEND_STARTUP_FAILURE: 'backend_incomplete_installation',
-        AIONUI_DISABLE_AUTO_UPDATE: '1',
+        DCODE_DISABLE_AUTO_UPDATE: '1',
         AIONUI_DISABLE_DEVTOOLS: '1',
         DCODE_E2E_TEST: '1',
         AIONUI_CDP_PORT: '0',

@@ -211,7 +211,7 @@ Variables set automatically during test launch:
 | Variable                     | Value | Purpose                  |
 | ---------------------------- | ----- | ------------------------ |
 | `AIONUI_E2E_TEST`            | `1`   | App recognizes test mode |
-| `AIONUI_DISABLE_AUTO_UPDATE` | `1`   | No update checks         |
+| `DCODE_DISABLE_AUTO_UPDATE` | `1`   | No update checks         |
 | `AIONUI_DISABLE_DEVTOOLS`    | `1`   | No DevTools windows      |
 | `AIONUI_CDP_PORT`            | `0`   | CDP disabled             |
 

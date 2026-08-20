@@ -84,7 +84,7 @@ const e2eStateFile = path.join(e2eStateSandboxDir, 'extension-states.json');
 **Environment variable** (L113):
 
 ```typescript
-AIONUI_EXTENSION_STATES_FILE: process.env.AIONUI_EXTENSION_STATES_FILE || e2eStateFile;
+DCODE_EXTENSION_STATES_FILE: process.env.DCODE_EXTENSION_STATES_FILE || e2eStateFile;
 ```
 
 **Current isolation**: Each worker creates unique temp directory → **no conflict** (✅ parallel-safe for this resource)

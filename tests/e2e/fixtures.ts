@@ -199,9 +199,9 @@ async function launchApp(): Promise<ElectronApplication> {
 
   const commonEnv = {
     ...process.env,
-    AIONUI_EXTENSIONS_PATH: process.env.AIONUI_EXTENSIONS_PATH || path.join(projectRoot, 'examples'),
-    AIONUI_EXTENSION_STATES_FILE: process.env.AIONUI_EXTENSION_STATES_FILE || e2eStateFile,
-    AIONUI_DISABLE_AUTO_UPDATE: '1',
+    DCODE_EXTENSIONS_PATH: process.env.DCODE_EXTENSIONS_PATH || path.join(projectRoot, 'examples'),
+    DCODE_EXTENSION_STATES_FILE: process.env.DCODE_EXTENSION_STATES_FILE || e2eStateFile,
+    DCODE_DISABLE_AUTO_UPDATE: '1',
     AIONUI_DISABLE_DEVTOOLS: '1',
     DCODE_E2E_TEST: '1',
     AIONUI_E2E_USER_DATA_DIR: process.env.AIONUI_E2E_USER_DATA_DIR || e2eUserDataDir,
