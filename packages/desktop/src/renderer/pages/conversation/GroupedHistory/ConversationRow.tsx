@@ -12,7 +12,7 @@ import { resolveConversationLeadingMark } from '@/renderer/pages/conversation/ut
 import { cleanupSiderTooltips, getSiderTooltipProps } from '@/renderer/utils/ui/siderTooltip';
 import { useLayoutContext } from '@/renderer/hooks/context/LayoutContext';
 import { Checkbox, Dropdown, Menu, Spin, Tooltip } from '@arco-design/web-react';
-import { DeleteOne, EditOne, Export, MessageOne, MoreOne, Pushpin, Robot, Timer } from '@icon-park/react';
+import { DeleteOne, EditOne, Export, MessageOne, MoreOne, Pushpin, Robot, TagOne, Timer } from '@icon-park/react';
 import ForkBranchIcon from '@renderer/components/base/ForkBranchIcon';
 import classNames from 'classnames';
 import React from 'react';
@@ -20,6 +20,7 @@ import { useTranslation } from 'react-i18next';
 
 import type { ConversationRowProps } from './types';
 import { isConversationPinned } from './utils/groupingHelpers';
+import { getConversationTags } from './utils/tagHelpers';
 
 const ConversationRow: React.FC<ConversationRowProps> = (props) => {
   const {
@@ -48,11 +49,14 @@ const ConversationRow: React.FC<ConversationRowProps> = (props) => {
     onDelete,
     onExport,
     onTogglePin,
+    onManageTags,
+    getTagColor,
     getJobStatus,
   } = props;
   const { t } = useTranslation();
   const { info: assistantInfo } = usePresetAssistantInfo(conversation);
   const isPinned = isConversationPinned(conversation);
+  const conversationTags = getConversationTags(conversation);
   // Fork-lineage badge: present only on forked conversations (extra.fork is
   // server-minted by the fork API). Parent name resolves from the loaded
   // sidebar list; a deleted/unloaded parent degrades to the generic tip.
@@ -216,6 +220,19 @@ const ConversationRow: React.FC<ConversationRowProps> = (props) => {
                   </span>
                 </Tooltip>
               )}
+              {conversationTags.length > 0 && (
+                <Tooltip content={conversationTags.join(', ')} position='top'>
+                  <span className='flex-shrink-0 flex items-center gap-2px'>
+                    {conversationTags.slice(0, 3).map((tag) => (
+                      <span
+                        key={tag}
+                        className='size-6px rd-full flex-shrink-0'
+                        style={{ backgroundColor: `rgb(var(--${getTagColor(tag)}-6))` }}
+                      />
+                    ))}
+                  </span>
+                </Tooltip>
+              )}
             </div>
           </Tooltip>
         </FlexFullContainer>
@@ -246,6 +263,10 @@ const ConversationRow: React.FC<ConversationRowProps> = (props) => {
                       onEditStart(conversation);
                       return;
                     }
+                    if (key === 'manageTags') {
+                      onManageTags(conversation);
+                      return;
+                    }
                     if (key === 'createCronTask') {
                       onCreateCronTask(conversation);
                       return;
@@ -269,6 +290,12 @@ const ConversationRow: React.FC<ConversationRowProps> = (props) => {
                     <div className='flex items-center gap-8px'>
                       <EditOne theme='outline' size='14' />
                       <span>{t('conversation.history.rename')}</span>
+                    </div>
+                  </Menu.Item>
+                  <Menu.Item key='manageTags'>
+                    <div className='flex items-center gap-8px'>
+                      <TagOne theme='outline' size='14' />
+                      <span>{t('conversation.history.tagMenuItem')}</span>
                     </div>
                   </Menu.Item>
                   <Menu.Item key='createCronTask'>

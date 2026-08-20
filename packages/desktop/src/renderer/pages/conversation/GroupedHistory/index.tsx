@@ -14,18 +14,22 @@ import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { Button, Dropdown, Empty, Input, Menu, Modal, Tooltip } from '@arco-design/web-react';
 import { Delete, MoreOne, Plus, Right } from '@icon-park/react';
 import classNames from 'classnames';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import WorkspaceCollapse from '../components/WorkspaceCollapse';
 import ConversationRow from './ConversationRow';
 import SortableConversationRow from './SortableConversationRow';
+import TagFilterBar from './Tags/TagFilterBar';
+import TagManageModal from './Tags/TagManageModal';
 import { useBatchSelection } from './hooks/useBatchSelection';
 import { useConversationActions } from './hooks/useConversationActions';
 import { useConversations } from './hooks/useConversations';
 import { useDragAndDrop } from './hooks/useDragAndDrop';
+import { useTagColors } from './hooks/useTagColors';
 import type { ConversationRowProps, WorkspaceGroupedHistoryProps } from './types';
+import { deriveTagSet, getConversationTags } from './utils/tagHelpers';
 
 const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
   onSessionClick,
@@ -52,7 +56,28 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
     handleToggleWorkspace,
     collapsedSections,
     toggleSection,
+    selectedTags,
+    toggleTag,
+    clearTagFilter,
   } = useConversations();
+
+  const { getColor: getTagColor } = useTagColors();
+  const availableTags = useMemo(() => deriveTagSet(conversations), [conversations]);
+  const [tagManageTarget, setTagManageTarget] = useState<{ conversationId?: string; currentTags?: string[] } | null>(
+    null
+  );
+
+  const renderTagFilterBar = () =>
+    !collapsed && (
+      <TagFilterBar
+        availableTags={availableTags}
+        getColor={getTagColor}
+        selectedTags={selectedTags}
+        onToggleTag={toggleTag}
+        onClear={clearTagFilter}
+        onManage={() => setTagManageTarget({})}
+      />
+    );
 
   const SectionLabel = useCallback(
     ({ sectionKey, label, trailing }: { sectionKey: string; label: string; trailing?: React.ReactNode }) => {
@@ -171,6 +196,9 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
       onCreateCronTask: handleCreateCronTask,
       onDelete: handleDeleteClick,
       onTogglePin: handleTogglePin,
+      onManageTags: (c: TChatConversation) =>
+        setTagManageTarget({ conversationId: c.id, currentTags: getConversationTags(c) }),
+      getTagColor,
       getJobStatus,
       resolveConversationName,
     }),
@@ -191,6 +219,7 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
       handleCreateCronTask,
       handleDeleteClick,
       handleTogglePin,
+      getTagColor,
       getJobStatus,
       resolveConversationName,
     ]
@@ -239,6 +268,7 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
   if (timelineSections.length === 0 && pinnedConversations.length === 0) {
     return (
       <>
+        {renderTagFilterBar()}
         {afterPinnedContent}
         <div className='py-48px flex-center'>
           <Empty description={t('conversation.history.noHistory')} />
@@ -271,6 +301,16 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
           allowClear
         />
       </Modal>
+
+      {tagManageTarget && (
+        <TagManageModal
+          visible
+          onClose={() => setTagManageTarget(null)}
+          conversations={conversations}
+          conversationId={tagManageTarget.conversationId}
+          currentTags={tagManageTarget.currentTags}
+        />
+      )}
 
       {batchMode && !collapsed && (
         <div className='px-12px pb-8px pt-2px sticky top-0 z-20 bg-[var(--bg-2)]'>
@@ -366,6 +406,8 @@ const WorkspaceGroupedHistory: React.FC<WorkspaceGroupedHistoryProps> = ({
           })}
         </div>
       </AionModal>
+
+      {renderTagFilterBar()}
 
       <div>
         {/* L1: Pinned section */}

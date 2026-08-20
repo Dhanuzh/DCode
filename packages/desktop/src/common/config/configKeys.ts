@@ -16,6 +16,9 @@ export type ConfigKeyMap = {
   'guid.lastAssistantId': string | undefined;
   /** User-defined order for the enabled assistant picker surfaces. */
   'assistants.enabledOrder': string[] | undefined;
+  /** Tag name -> Arco preset color-token map. Stable coloring across sessions;
+   * keys are the tag names actually used, in creation order. */
+  'conversation.tagColors': Record<string, string> | undefined;
   'upload.saveToWorkspace': boolean | undefined;
   'system.closeToTray': boolean | undefined;
   'system.notificationEnabled': boolean | undefined;

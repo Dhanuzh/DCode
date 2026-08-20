@@ -244,6 +244,8 @@ export type TChatConversation =
           pinned?: boolean;
           /** 置顶时间戳（毫秒）/ Pin timestamp in milliseconds */
           pinned_at?: number;
+          /** User-assigned tag names (free-form strings, not IDs). Empty/absent = no tags. */
+          tags?: string[];
           /** ACP 后端的 session UUID，用于会话恢复 / ACP backend session UUID for session resume */
           acp_session_id?: string;
           /** Conversation ID that owns the ACP session / 拥有该 ACP session 的会话 ID */
@@ -290,6 +292,8 @@ export type TChatConversation =
           pinned?: boolean;
           /** 置顶时间戳（毫秒）/ Pin timestamp in milliseconds */
           pinned_at?: number;
+          /** User-assigned tag names (free-form strings, not IDs). Empty/absent = no tags. */
+          tags?: string[];
           /** Persisted session mode for resume support / 持久化的会话模式，用于恢复 */
           session_mode?: string;
           /** User-selected Codex model from Guid page / 用户在引导页选择的 Codex 模型 */
@@ -340,6 +344,8 @@ export type TChatConversation =
           pinned?: boolean;
           /** 置顶时间戳（毫秒）/ Pin timestamp in milliseconds */
           pinned_at?: number;
+          /** User-assigned tag names (free-form strings, not IDs). Empty/absent = no tags. */
+          tags?: string[];
           /** Legacy marker for pre-provider-probe health-check conversations */
           is_health_check?: boolean;
           /** Cron job ID that spawned this conversation */
@@ -365,6 +371,7 @@ export type TChatConversation =
           preset_assistant_id?: string;
           pinned?: boolean;
           pinned_at?: number;
+          tags?: string[];
           /** Legacy marker for pre-provider-probe health-check conversations */
           is_health_check?: boolean;
           cron_job_id?: string;
@@ -389,6 +396,8 @@ export type TChatConversation =
           pinned?: boolean;
           /** 置顶时间戳（毫秒）/ Pin timestamp in milliseconds */
           pinned_at?: number;
+          /** User-assigned tag names (free-form strings, not IDs). Empty/absent = no tags. */
+          tags?: string[];
           /** Legacy marker for pre-provider-probe health-check conversations */
           is_health_check?: boolean;
           /** Cron job ID that spawned this conversation */
@@ -416,6 +425,8 @@ export type TChatConversation =
           pinned?: boolean;
           /** Pin timestamp in milliseconds */
           pinned_at?: number;
+          /** User-assigned tag names (free-form strings, not IDs). Empty/absent = no tags. */
+          tags?: string[];
           /** Legacy marker for pre-provider-probe health-check conversations */
           is_health_check?: boolean;
           /** Cron job ID that spawned this conversation */
@@ -449,6 +460,8 @@ export type TChatConversation =
         pinned?: boolean;
         /** Pin timestamp in milliseconds */
         pinned_at?: number;
+        /** User-assigned tag names (free-form strings, not IDs). Empty/absent = no tags. */
+        tags?: string[];
         /** Max tokens per response */
         maxTokens?: number;
         /** Max agentic turns */

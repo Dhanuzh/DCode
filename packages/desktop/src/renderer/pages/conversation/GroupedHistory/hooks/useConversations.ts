@@ -5,10 +5,11 @@
  */
 
 import type { TChatConversation } from '@/common/config/storage';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useConversationHistoryContext } from '@/renderer/hooks/context/ConversationHistoryContext';
 import type { TimelineSection } from '../types';
+import { filterGroupedHistoryByTags } from '../utils/tagHelpers';
 import {
   dispatchWorkspaceExpansionChange,
   readExpandedWorkspaces,
@@ -17,10 +18,23 @@ import {
 
 // Persist section collapsed state across reloads.
 const COLLAPSED_SECTIONS_KEY = 'grouped-history-collapsed-sections';
+// Persist the selected tag filter across reloads.
+const TAG_FILTER_STORAGE_KEY = 'grouped-history-tag-filter';
 
 const readCollapsedSections = (): Set<string> => {
   try {
     const raw = localStorage.getItem(COLLAPSED_SECTIONS_KEY);
+    if (!raw) return new Set();
+    const arr = JSON.parse(raw) as string[];
+    return new Set(Array.isArray(arr) ? arr : []);
+  } catch {
+    return new Set();
+  }
+};
+
+const readSelectedTags = (): Set<string> => {
+  try {
+    const raw = localStorage.getItem(TAG_FILTER_STORAGE_KEY);
     if (!raw) return new Set();
     const arr = JSON.parse(raw) as string[];
     return new Set(Array.isArray(arr) ? arr : []);
@@ -56,6 +70,7 @@ const locateConversation = (
 export const useConversations = () => {
   const [expandedWorkspaces, setExpandedWorkspaces] = useState<string[]>(() => readExpandedWorkspaces());
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(() => readCollapsedSections());
+  const [selectedTags, setSelectedTags] = useState<Set<string>>(() => readSelectedTags());
   const { id } = useParams();
   const {
     conversations,
@@ -66,7 +81,34 @@ export const useConversations = () => {
     groupedHistory,
   } = useConversationHistoryContext();
 
-  const { pinnedConversations, timelineSections } = groupedHistory;
+  // Unfiltered — used for locating/auto-expanding/scrolling to the active
+  // conversation even when it's hidden by the current tag filter, so
+  // navigation never silently fails just because a filter is active.
+  const { pinnedConversations: rawPinnedConversations, timelineSections: rawTimelineSections } = groupedHistory;
+
+  const { pinnedConversations, timelineSections } = useMemo(
+    () => filterGroupedHistoryByTags(groupedHistory, selectedTags),
+    [groupedHistory, selectedTags]
+  );
+
+  const toggleTag = useCallback((name: string) => {
+    setSelectedTags((prev) => {
+      const next = new Set(prev);
+      if (next.has(name)) next.delete(name);
+      else next.add(name);
+      return next;
+    });
+  }, []);
+
+  const clearTagFilter = useCallback(() => setSelectedTags(new Set()), []);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(TAG_FILTER_STORAGE_KEY, JSON.stringify([...selectedTags]));
+    } catch {
+      // ignore
+    }
+  }, [selectedTags]);
 
   // Track whether auto-expand has already been performed to avoid
   // re-expanding workspaces after a user manually collapses them (#1156)
@@ -103,7 +145,7 @@ export const useConversations = () => {
 
     if (revealedIdRef.current === id) return;
 
-    const location = locateConversation(id, pinnedConversations, timelineSections);
+    const location = locateConversation(id, rawPinnedConversations, rawTimelineSections);
     if (!location) return; // data not loaded yet; effect re-runs when it arrives
     revealedIdRef.current = id;
 
@@ -137,7 +179,7 @@ export const useConversations = () => {
       cancelAnimationFrame(outerRafId);
       cancelAnimationFrame(innerRafId);
     };
-  }, [clearCompletionUnread, id, setActiveConversation, pinnedConversations, timelineSections]);
+  }, [clearCompletionUnread, id, setActiveConversation, rawPinnedConversations, rawTimelineSections]);
 
   // Persist workspace expansion state
   useEffect(() => {
@@ -167,7 +209,7 @@ export const useConversations = () => {
       return;
     }
     const allWorkspaces: string[] = [];
-    timelineSections.forEach((section) => {
+    rawTimelineSections.forEach((section) => {
       section.items.forEach((item) => {
         if (item.type === 'workspace' && item.workspaceGroup) {
           allWorkspaces.push(item.workspaceGroup.workspace);
@@ -178,12 +220,14 @@ export const useConversations = () => {
       setExpandedWorkspaces(allWorkspaces);
       hasAutoExpandedRef.current = true;
     }
-  }, [timelineSections]);
+  }, [rawTimelineSections]);
 
-  // Remove stale workspace entries that no longer exist in the data
+  // Remove stale workspace entries that no longer exist in the data.
+  // Uses the unfiltered list so a workspace hidden by the current tag filter
+  // doesn't lose its expand/collapse state when the filter is toggled off.
   useEffect(() => {
     const currentWorkspaces = new Set<string>();
-    timelineSections.forEach((section) => {
+    rawTimelineSections.forEach((section) => {
       section.items.forEach((item) => {
         if (item.type === 'workspace' && item.workspaceGroup) {
           currentWorkspaces.add(item.workspaceGroup.workspace);
@@ -195,7 +239,7 @@ export const useConversations = () => {
       const filtered = prev.filter((ws) => currentWorkspaces.has(ws));
       return filtered.length === prev.length ? prev : filtered;
     });
-  }, [timelineSections]);
+  }, [rawTimelineSections]);
 
   const handleToggleWorkspace = useCallback((workspace: string) => {
     setExpandedWorkspaces((prev) => {
@@ -216,5 +260,8 @@ export const useConversations = () => {
     handleToggleWorkspace,
     collapsedSections,
     toggleSection,
+    selectedTags,
+    toggleTag,
+    clearTagFilter,
   };
 };

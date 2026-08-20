@@ -60,6 +60,8 @@ export type ConversationRowProps = {
   onDelete: (conversation_id: string) => void;
   onExport?: (conversation: TChatConversation) => void;
   onTogglePin: (conversation: TChatConversation) => void;
+  onManageTags: (conversation: TChatConversation) => void;
+  getTagColor: (tagName: string) => string;
   getJobStatus: (conversation_id: string) => 'none' | 'active' | 'paused' | 'error' | 'unread';
   /** Resolve a loaded conversation's name by id (fork-lineage badge tooltip). */
   resolveConversationName?: (conversation_id: string) => string | undefined;
