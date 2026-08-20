@@ -322,6 +322,10 @@ class FileServiceClass {
     source: UploadSource = 'sendbox'
   ): Promise<FileMetadata[]> {
     const processedFiles: FileMetadata[] = [];
+    // Non-FILE_TOO_LARGE upload errors are caught per-file below so one bad
+    // file doesn't abort the rest of the batch; track them here so the
+    // caller's Message.error toast still fires instead of failing silently.
+    let hadUploadError = false;
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
@@ -351,6 +355,7 @@ class FileServiceClass {
           continue;
         }
         console.error('Failed to upload file:', error);
+        hadUploadError = true;
         continue;
       } finally {
         tracker.finish();
@@ -363,6 +368,13 @@ class FileServiceClass {
         type: file.type,
         lastModified: file.lastModified,
       });
+    }
+
+    if (hadUploadError && processedFiles.length === 0) {
+      // Every dropped file failed for a reason other than FILE_TOO_LARGE
+      // (backend not ready, network error, etc.) — surface it so the caller's
+      // Message.error toast fires instead of failing silently.
+      throw new Error('FILE_UPLOAD_FAILED');
     }
 
     return processedFiles;

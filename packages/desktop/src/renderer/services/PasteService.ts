@@ -177,6 +177,10 @@ class PasteServiceClass {
       // 处理文件，跳过文本处理
       const fileList: FileMetadata[] = [];
       const usedFileNames = new Set<string>();
+      // Non-FILE_TOO_LARGE upload errors are caught per-file below so one bad
+      // file doesn't abort the rest of the batch; track them here so the
+      // caller's Message.error toast still fires instead of failing silently.
+      let hadUploadError = false;
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const file_path = (file as File & { path?: string }).path;
@@ -238,6 +242,7 @@ class PasteServiceClass {
                 throw error;
               }
               console.error('创建临时文件失败:', error);
+              hadUploadError = true;
             }
           } else {
             // 不支持的文件类型，跳过但不报错（让后续过滤处理）
@@ -290,6 +295,7 @@ class PasteServiceClass {
                 throw error;
               }
               console.error('上传粘贴文件失败:', error);
+              hadUploadError = true;
             }
           } else {
             // 不支持的文件类型
@@ -340,6 +346,7 @@ class PasteServiceClass {
                 throw error;
               }
               console.error('创建临时文件失败:', error);
+              hadUploadError = true;
             }
           } else {
             console.warn(`Unsupported file type: ${file.name}, extension: ${fileExt}`);
@@ -350,6 +357,12 @@ class PasteServiceClass {
       // 处理完文件后，总是返回 true（阻止文本插入）
       if (fileList.length > 0) {
         onFilesAdded(fileList);
+      }
+      if (hadUploadError) {
+        // At least one file failed for a reason other than FILE_TOO_LARGE
+        // (backend not ready, network error, etc.) — surface it so the caller's
+        // Message.error toast fires instead of failing silently.
+        throw new Error('FILE_UPLOAD_FAILED');
       }
       return true; // 阻止默认行为，不插入文件名文本
     }
