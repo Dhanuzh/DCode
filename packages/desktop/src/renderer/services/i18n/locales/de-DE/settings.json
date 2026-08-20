@@ -1354,5 +1354,28 @@
     "clearConfirmContent": "Du wirst von allen Websites im integrierten Browser abgemeldet. Das kann nicht rückgängig gemacht werden.",
     "clearSuccess": "Browserdaten gelöscht",
     "clearFailed": "Browserdaten konnten nicht gelöscht werden"
+  },
+  "backup": {
+    "title": "Backup",
+    "exportLabel": "Export configuration",
+    "exportDesc": "Export providers, assistants, and MCP servers to a JSON file. API keys and secrets are always removed.",
+    "exportButton": "Export",
+    "exportModalTitle": "Export configuration",
+    "exportFolderLabel": "Destination folder",
+    "exportFilenamePlaceholder": "dcode-backup.json",
+    "exportConfirm": "Export",
+    "exportNoDir": "Choose a destination folder first",
+    "exportSuccess": "Exported to {{path}}",
+    "exportFailed": "Failed to export configuration",
+    "importLabel": "Import configuration",
+    "importDesc": "Import providers, assistants, and MCP servers from a backup file. Imported providers will need their API keys re-entered.",
+    "importButton": "Import",
+    "importReadFailed": "Failed to read the selected file",
+    "importInvalidJson": "This file is not valid JSON",
+    "importMissingVersion": "This file is missing a version field and cannot be imported",
+    "importUnsupportedVersion": "This file was exported by an unsupported app version",
+    "importSummary": "{{providers}} providers, {{assistants}} assistants, {{mcpServers}} MCP servers imported",
+    "importPartialFailure": "{{count}} items failed to import - see console for details",
+    "importApiKeyReminder": "Re-enter API keys for imported providers"
   }
 }

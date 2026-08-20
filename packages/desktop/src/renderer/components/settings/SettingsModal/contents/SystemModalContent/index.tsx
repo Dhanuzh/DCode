@@ -25,6 +25,7 @@ import { useTranslation } from 'react-i18next';
 import useSWR from 'swr';
 import { useSettingsViewMode } from '../../settingsViewContext';
 import BrowserNotificationGrant from './BrowserNotificationGrant';
+import BackupSection from './BackupSection';
 import DevSettings from './DevSettings';
 import BrowserDataSection from './BrowserDataSection';
 import DirInputItem from './DirInputItem';
@@ -547,6 +548,9 @@ const SystemModalContent: React.FC = () => {
 
           {/* In-app browser: sign-in state and cache */}
           <BrowserDataSection />
+
+          {/* Backup: export/import providers, assistants, and MCP servers */}
+          <BackupSection />
 
           {/* Developer settings: DevTools + CDP (only visible in dev mode) */}
           <DevSettings />

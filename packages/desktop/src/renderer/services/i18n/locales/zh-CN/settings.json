@@ -1355,5 +1355,28 @@
     "clearConfirmContent": "应用内浏览器中所有网站的登录状态都会被退出，且无法恢复。",
     "clearSuccess": "浏览数据已清空",
     "clearFailed": "清空浏览数据失败"
+  },
+  "backup": {
+    "title": "Backup",
+    "exportLabel": "Export configuration",
+    "exportDesc": "Export providers, assistants, and MCP servers to a JSON file. API keys and secrets are always removed.",
+    "exportButton": "Export",
+    "exportModalTitle": "Export configuration",
+    "exportFolderLabel": "Destination folder",
+    "exportFilenamePlaceholder": "dcode-backup.json",
+    "exportConfirm": "Export",
+    "exportNoDir": "Choose a destination folder first",
+    "exportSuccess": "Exported to {{path}}",
+    "exportFailed": "Failed to export configuration",
+    "importLabel": "Import configuration",
+    "importDesc": "Import providers, assistants, and MCP servers from a backup file. Imported providers will need their API keys re-entered.",
+    "importButton": "Import",
+    "importReadFailed": "Failed to read the selected file",
+    "importInvalidJson": "This file is not valid JSON",
+    "importMissingVersion": "This file is missing a version field and cannot be imported",
+    "importUnsupportedVersion": "This file was exported by an unsupported app version",
+    "importSummary": "{{providers}} providers, {{assistants}} assistants, {{mcpServers}} MCP servers imported",
+    "importPartialFailure": "{{count}} items failed to import - see console for details",
+    "importApiKeyReminder": "Re-enter API keys for imported providers"
   }
 }
